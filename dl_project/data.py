@@ -2,14 +2,14 @@ import numpy as np
 import gzip
 import torch
 import torch.nn as nn
-#import torchvision
-#import torchvision.transforms as transforms
-#from torch.utils.data import DataLoader
+import torchvision
+import torchvision.transforms as transforms
+from torch.utils.data import DataLoader
 
 #########################################################################
 # images into numpy array
 #########################################################################
-
+""" 
 def training_images():
     with gzip.open('train-images-idx3-ubyte.gz', 'r') as f:
         # first 4 bytes is a magic number
@@ -27,7 +27,9 @@ def training_images():
             .reshape((image_count, row_count, column_count))
         return images
 
-
+####################################################################################
+# scaling of images
+###################################################################################
 new_images = []
 
 for image in training_images():                                    # image pixel from 0-255 to 0.0-1.0
@@ -67,16 +69,6 @@ data = []
 for i in range(len(training_labels())):
     data.append((image_tensor[i], labels_tensor[i]))
 
-
-#############################################################################################
-# image encoding
-############################################################################################
-
-
-# ?
-
-
-
 #########################################################################################
 # one-hot_encoding of labels and label embedding
 #########################################################################################
@@ -87,12 +79,8 @@ for image, label in data:
     enc_label = torch.nn.functional.one_hot(label, num_classes=10)
     enc_label = enc_label.float()*E
     enc_data.append((image, enc_label))
+ """
 
-
-#stacked_tensor = torch.stack(listoftensors)                                   # falls alle Labels in einen einzigen Tensor rein sollen und nicht in
-#stacked_tensor = torch.reshape(stacked_tensor, (60000,10))                    # 600 verschiedenen
-
-"""
 transformer = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
@@ -101,7 +89,7 @@ transformer = transforms.Compose([
 
 # DataLoaders
 batch_size=100
-train_set = 'C:\\Users\\laris\\Desktop\\dl_project\\data'
+train_path = 'C:\\Users\\laris\\Desktop\\dl_project\\data'
 test_path = 'C:\\Users\\laris\\Desktop\\dl_project\\data'
 
 train_loader = DataLoader(
@@ -126,27 +114,84 @@ test_loader = DataLoader(
 ###############################################################
 # One-Hot_Encoding for labels
 ###############################################################
-
+""" 
 listoftensors = []
 
 for batch_size, (_, y) in enumerate(train_loader):
         x = torch.nn.functional.one_hot(y, num_classes=10)
         listoftensors.append(x)
 
+print(listoftensors[0]) """
 
-#stacked_tensor = torch.stack(listoftensors)                                   # falls alle Labels in einen einzigen Tensor rein sollen und nicht in
-#stacked_tensor = torch.reshape(stacked_tensor, (60000,10))                    # 600 verschiedenen
- """
+#new_list = []
 
+#images, labels = next(iter(train_loader))
+#images_new = images.view(images.shape[0], -1)
+
+#for i in range(60000):
+#    new_list.append((images_new[i], labels[i]))
+#print(len(images_new))
+#print(len(labels))
 
 ########################################################
 # create model
 ########################################################
 
-#model = nn.Sequential(nn.Linear(input_size, hidden_size1),
-                       # nn.ReLU()
-                        #nn.Linear(hidden_size1, hidden_size2),
-                        #nn.ReLU(),
-                        #nn.Linear(hidden_size2, output_size),
-                        #nn.LogSoftmax(dim=1)
-                        #)
+input_size = 784
+hidden_size1 = 128
+hidden_size2 = 64
+output_size = 10
+
+model = nn.Sequential(nn.Linear(input_size, hidden_size1),
+                      nn.ReLU(),
+                      nn.Linear(hidden_size1, hidden_size2),
+                      nn.ReLU(),
+                      nn.Linear(hidden_size2, output_size),
+                      nn.LogSoftmax(dim=1))
+
+
+
+""" loss = nn.CrossEntropyLoss()
+
+#print(loss(model(images_new), labels).backward())
+
+optim = torch.optim.Adam(model.parameters(), lr=0.1)
+
+for k in range(1000):
+    for i in torch.randperm(len(new_list)):
+        x, y = new_list[i]
+        loss(model(x), y)
+        optim.step()
+        optim.zero_grad()
+
+
+for images, labels in new_list:
+    print(loss(model(images), labels)) """
+criterion = nn.NLLLoss()
+images, labels = next(iter(train_loader))
+images_new = images.view(images.shape[0], -1)
+
+
+optimizer = torch.optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
+epochs = 15
+for e in range(epochs):
+    running_loss = 0
+    for images, labels in train_loader:
+        # Flatten MNIST images into a 784 long vector
+        images = images.view(images.shape[0], -1)
+    
+        # Training pass
+        optimizer.zero_grad()
+        
+        output = model(images)
+        loss = criterion(output, labels)
+        
+        #This is where the model learns by backpropagating
+        loss.backward()
+        
+        #And optimizes its weights here
+        optimizer.step()
+        
+        running_loss += loss.item()
+    else:  
+        print("Epoch {} - Training loss: {}".format(e, running_loss/len(train_loader)))
