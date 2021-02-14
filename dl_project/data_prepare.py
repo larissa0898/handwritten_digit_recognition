@@ -40,7 +40,9 @@ i = 0
 for no in [1, 4, 8, 9]:
     img = cv2.imread(str(no)+".jpg", 
     cv2.IMREAD_GRAYSCALE)
+    print(type(img))
     gray = cv2.resize(img, (28, 28))
+    print(type(gray))
     (thresh, gray) = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 
     cv2.imwrite(str(no)+".jpg", img)    
@@ -57,19 +59,21 @@ for no in [1, 4, 8, 9]:
 #################################################
 # np array to tensor to np array to make it visible
 ####################################################
-""" 
+
 tensor_array = torch.from_numpy(images)
 
 tensor_array = torch.reshape(tensor_array,(4,28,28))
 
 a = tensor_array.numpy()
 
-pyplot.imshow(a[3])
+""" pyplot.imshow(a[0])
 pyplot.show() """
+
+
 ###################################################
 # want to fit image into 20x20 pixel box
 ###################################################
-
+""" 
 while np.sum(gray[0]) == 0:
     gray = gray[1:]
 
@@ -97,20 +101,20 @@ else:
     factor = 20.0/cols
     cols = 20
     rows = int(round(rows*factor))
-    gray = cv2.resize(gray, (cols, rows))
+    gray = cv2.resize(gray, (cols, rows)) """
 
 ########################################################
 # add missing black rows and columns to get 28x28 pixel
 ########################################################
-
+""" 
 colsPadding = (int(math.ceil((28-cols)/2.0)),int(math.floor((28-cols)/2.0)))
 rowsPadding = (int(math.ceil((28-rows)/2.0)),int(math.floor((28-rows)/2.0)))
-gray = np.lib.pad(gray,(rowsPadding,colsPadding),'constant')
-
+gray = np.lib.pad(gray,(rowsPadding,colsPadding), mode='constant')
+ """
 ##############################################################
 # get the mass of the image with ndimage
 ##############################################################
-
+""" 
 def getBestShift(img):
     cy,cx = ndimage.measurements.center_of_mass(img)       # ERROR because of missing ndimage module, can't install it
     rows,cols = img.shape
@@ -127,13 +131,17 @@ def shift(img,sx,sy):
     rows,cols = img.shape
     M = np.float32([[1,0,sx],[0,1,sy]])
     shifted = cv2.warpAffine(img,M,(cols,rows))
-    return shifted
+    return shifted """
 
 
 
 
-gray = np.lib.pad(gray,(rowsPadding,colsPadding),mode='constant')
+#gray = np.lib.pad(gray,(rowsPadding,colsPadding),mode='constant')
 
-shiftx,shifty = getBestShift(gray)
+""" shiftx,shifty = getBestShift(gray)
 shifted = shift(gray,shiftx,shifty)
-gray = shifted
+gray = shifted """
+
+""" pyplot.imshow(images[0])
+pyplot.show()
+ """
