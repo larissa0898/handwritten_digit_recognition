@@ -15,13 +15,13 @@ transformer = transforms.Compose([
 # creating DataLoaders
 ##################################################################
 batch_size=100
-train_path = 'C:\\Users\\laris\\Desktop\\dl_project\\data'
-test_path = 'C:\\Users\\laris\\Desktop\\dl_project\\data'
+train_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project'
+test_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project'
 
 train_loader = DataLoader(
         torchvision.datasets.MNIST(train_path, 
                             train=True, 
-                            download=True, 
+                            download=False, 
                             transform=transformer),
         batch_size, 
         shuffle=True)
@@ -30,7 +30,7 @@ train_loader = DataLoader(
 test_loader = DataLoader(
         torchvision.datasets.MNIST(test_path,
                             train=False,
-                            download=True,
+                            download=False,
                             transform=transformer),
         batch_size,
         shuffle=True)

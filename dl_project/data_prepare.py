@@ -38,11 +38,14 @@ correct_vals = np.zeros((4, 10))
 i = 0
 
 for no in [1, 4, 8, 9]:
-    img = cv2.imread(str(no)+".jpg", 
-    cv2.IMREAD_GRAYSCALE)
-    print(type(img))
+    img = Image.open(str(no)+".jpg").convert('L')
+    img = np.array(img)
+    print(img)
+
+    print(img)
     gray = cv2.resize(img, (28, 28))
-    print(type(gray))
+
+    #print(type(gray))
     (thresh, gray) = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 
     cv2.imwrite(str(no)+".jpg", img)    

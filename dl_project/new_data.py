@@ -11,25 +11,10 @@ import math
 """ images = []
 labels = []
 i = 0
-
-for no in [1, 4, 8, 9]:
-    img = cv2.imread(str(no)+".jpg")
-
-    blur = cv2.GaussianBlur(img,(5,5),0)
-    #extract = cv2.selectROI(blur)
-    images.append(blur)
-    labels.append(no)
-    i += 1
-
-#print(images[0])
-#print(labels) """
-
-""" images = []
-labels = []
-i = 0
 #1, 4, 8, 9
-for no in [4]:
-    img = cv2.imread(str(no)+".jpg")
+for no in [1]:
+    img = cv2.imread(str(no)+".jpg", cv2.IMREAD_GRAYSCALE)
+    print(img)
 
     blur = cv2.GaussianBlur(img,(5,5),0)
     extract = cv2.selectROI(blur)
@@ -43,7 +28,7 @@ for no in [4]:
 #print(labels)
 
 im = Image.fromarray(images[0])
-im.save("extract4.jpeg") """
+im.save("extract1.jpg") """
 
 """ 
 pyplot.imshow(images[0])
@@ -62,7 +47,7 @@ pyplot.show()
     return (cX,cY)
 
 img1 = cv2.imread("blanko_.jpg")
-img2 = cv2.resize(cv2.imread("extract4.jpeg"), None, fx=0.3, fy=0.3)
+img2 = cv2.resize(cv2.imread("extract1.jpg"), None, fx=0.3, fy=0.3)
 
 ## (1) Find centers
 pt1 = findCenter(img1)
@@ -78,18 +63,22 @@ h,w = img2.shape[:2]
 dst = img1.copy()
 dst[dy:dy+h, dx:dx+w] = img2
 
-cv2.imwrite("vier.png", dst) """
+cv2.imwrite("eins.png", dst) """
 
 """ 
 pyplot.imshow()
 pyplot.show() """
 
-image = Image.open("vier.png")
+image = Image.open("eins.png").convert('L')
+
 
 resized = image.resize((28,28))
 
-pix = np.array(resized)
+#pix = np.array(resized)
 #print(type(pix))
 #print(pix)
-pyplot.imshow(pix)
-pyplot.show()
+#pyplot.imshow(pix)
+#pyplot.show()
+
+#im = Image.fromarray(pix)
+resized.save("final_1.png")
