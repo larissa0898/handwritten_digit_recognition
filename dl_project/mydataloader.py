@@ -4,6 +4,8 @@ import numpy as np
 from PIL import Image
 from torchvision.datasets import ImageFolder
 from torchvision.datasets.folder import default_loader
+from typing import *
+from torchvision.datasets.folder import IMG_EXTENSIONS
 
 class MyImageFolder(ImageFolder):
     """A generic data loader where the images are arranged in this way: ::

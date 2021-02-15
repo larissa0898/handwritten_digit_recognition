@@ -11,8 +11,8 @@ import math
 images = []
 labels = []
 i = 0
-#1, 4, 8, 9
-for digit in [8]:
+
+for digit in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
     img = cv2.imread(str(digit)+".jpg", cv2.IMREAD_GRAYSCALE)                 # load image and grayscale it
 
     blur = cv2.GaussianBlur(img,(5,5),0)                                   # apply Gaussian Blur
@@ -21,11 +21,13 @@ for digit in [8]:
     imCrop = blur[int(extract[1]):int(extract[1]+extract[3]), int(extract[0]):int(extract[0]+extract[2])]      # save it in varibale imCrop
 
     images.append(imCrop)                                                  # append image to list
-    labels.append(digit)                                                   # append dagit/label to list
+    labels.append(digit)
+    im = Image.fromarray(images[i])                  # convert array to PIL image
+    im.save("extract{}.jpg".format(digit))                                                  # append dagit/label to list
     i += 1
 
-im = Image.fromarray(images[0])                  # convert array to PIL image
-im.save("extract8.jpg")                          # save PIL image and convert it to .jpg
+#im = Image.fromarray(images[0])                  # convert array to PIL image
+#im.save("extract9.jpg")                          # save PIL image and convert it to .jpg
 
 ################################################################################
 # find the center of digit extract and put it in center of new square image
@@ -41,34 +43,38 @@ def findCenter(img):
     cY = int(M["m01"] / M["m00"])
     return (cX,cY)
 
-img1 = cv2.imread("blanko_.jpg")
-img2 = cv2.resize(cv2.imread("extract8.jpg"), None, fx=0.25, fy=0.25)
+for m in range(len(images)):
 
-## (1) Find centers
-pt1 = findCenter(img1)
-pt2 = findCenter(img2)
+    img1 = cv2.imread("blanko_.jpg")
+    img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.25, fy=0.25)
 
-## (2) Calc offset
-dx = pt1[0] - pt2[0]
-dy = pt1[1] - pt2[1]
+    ## (1) Find centers
+    pt1 = findCenter(img1)
+    pt2 = findCenter(img2)
 
-## (3) do slice-op `paste`
-h,w = img2.shape[:2]
+    ## (2) Calc offset
+    dx = pt1[0] - pt2[0]
+    dy = pt1[1] - pt2[1]
 
-dst = img1.copy()
-dst[dy:dy+h, dx:dx+w] = img2
+    ## (3) do slice-op `paste`
+    h,w = img2.shape[:2]
 
-cv2.imwrite("1_8.png", dst)
+    dst = img1.copy()
+    dst[dy:dy+h, dx:dx+w] = img2
+
+    cv2.imwrite("1_{}.png".format(labels[m]), dst)
 
 #####################################################################
 # resize image to 28x28
 ####################################################################
 
-image = Image.open("1_8.png").convert('L')          # open image and again from 3 channels (RGB) to 1 channel -> grayscale
+for img in range(len(images)):
 
-resized = image.resize((28,28))
+    image = Image.open("1_{}.png".format(labels[img])).convert('L')          # open image and again from 3 channels (RGB) to 1 channel -> grayscale
 
-resized.save("final_8.png")
+    resized = image.resize((28,28))
+
+    resized.save("final_{}.png".format(labels[img]))
 
 
 

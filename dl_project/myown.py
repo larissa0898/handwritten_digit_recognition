@@ -3,6 +3,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
+from PIL import Image
 #from mydataloader import MyImageFolder
 
 
@@ -13,14 +14,14 @@ transformer = transforms.Compose([
 
 
 ##################################################################
-# creating DataLoaders
+# creating test and training DataLoaders
 ##################################################################
 
 batch_size=100
 
 train_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project'
 test_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project'
-#my_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\test_images\\testing\\1.png'
+
 
 train_loader = DataLoader(
         torchvision.datasets.MNIST(train_path, 
@@ -31,37 +32,26 @@ train_loader = DataLoader(
         shuffle=True)
 
 
-test_loader = DataLoader(
+""" test_loader = DataLoader(
         torchvision.datasets.MNIST(test_path,
                             train=False,
                             download=False,
                             transform=transformer),
         batch_size,
-        shuffle=True)
+        shuffle=True) """
 
-""" my_loader = DataLoader(
-    torchvision.datasets.ImageFolder(my_path,
-    transform=transformer),
-    batch_size,
-    shuffle=True
-) """
 
 #################################################################################
 # loading own images to mnist dataset
 #################################################################################
 
-""" my_loader = DataLoader(
-    torchvision.datasets.MyImageFolder(my_path,
-    transform=transformer),
-    shuffle=True) """
+my_data = Image.open("9.png")
+my_data = transformer(my_data)
 
-""" or just using ImageFolder of Pytorch
-or just create own Dataset """
+my_loader = DataLoader(
+    my_data,
+    shuffle=True)
 
-""" my_loader = DataLoader(torchvision.datasets.ImageFolder("C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\test_images", 
-                                            transform=transformer),
-                                            batch_size,
-                                            shuffle=True) """
 
 ######################################################################
 # creating model
@@ -91,7 +81,7 @@ optim = torch.optim.Adam(model.parameters(), lr=0.001)     # best result with lr
 # training the model
 ##########################################################################
 
-for epoch in range(10):
+""" for epoch in range(10):
     running_loss = 0.0
     for i, data in enumerate(train_loader, 0):
         inputs, labels = data
@@ -104,7 +94,7 @@ for epoch in range(10):
 
         running_loss += loss.item()
     else:
-        print("Epoch ", epoch, " - Training loss: ", running_loss/len(train_loader))
+        print("Epoch ", epoch, " - Training loss: ", running_loss/len(train_loader)) """
 
 
 ######################################################################################
@@ -120,8 +110,8 @@ for epoch in range(10):
 # loading model
 ########################################################################################
 
-#model.load_state_dict(torch.load('C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\model.pt'))
-#model.eval()
+model.load_state_dict(torch.load('C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\model.pt'))
+model.eval()
 
 
 
@@ -129,12 +119,12 @@ for epoch in range(10):
 # testing model with test_data
 ##########################################################################################
 
-
+#, torch.tensor([9])
 correct = 0
 total = 0
 with torch.no_grad():
-    for data in test_loader:
-        images, labels = data
+    for data in my_loader:
+        images, labels = data, torch.tensor([9])
         test_images = images.view(images.shape[0], -1)
 
         outputs = model(test_images)
