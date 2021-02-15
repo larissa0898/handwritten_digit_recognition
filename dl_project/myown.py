@@ -4,7 +4,6 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from PIL import Image
-#from mydataloader import MyImageFolder
 
 
 
@@ -45,7 +44,7 @@ train_loader = DataLoader(
 # loading own images to mnist dataset
 #################################################################################
 
-my_data = Image.open("9.png")
+my_data = Image.open("4.png")        ##################HIIIIIEEEERRR!!!!!!!!!
 my_data = transformer(my_data)
 
 my_loader = DataLoader(
@@ -124,7 +123,7 @@ correct = 0
 total = 0
 with torch.no_grad():
     for data in my_loader:
-        images, labels = data, torch.tensor([9])
+        images, labels = data, torch.tensor([4])
         test_images = images.view(images.shape[0], -1)
 
         outputs = model(test_images)
@@ -132,5 +131,6 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-print('Accuracy of the network on 10000 test images: %d %%' % 
+print(predicted)
+print('Accuracy of the network on test images: %d %%' % 
     (100 * correct / total))

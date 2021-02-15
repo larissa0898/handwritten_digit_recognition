@@ -1,11 +1,11 @@
 import torch
 from PIL import Image
-from PIL import ImageShow
-from matplotlib import image
-from matplotlib import pyplot
+#from PIL import ImageShow
+#from matplotlib import image
+#from matplotlib import pyplot
 import numpy as np
 import cv2 as cv2
-import math
+#import math
 
 
 images = []
@@ -13,7 +13,7 @@ labels = []
 i = 0
 
 for digit in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
-    img = cv2.imread(str(digit)+".jpg", cv2.IMREAD_GRAYSCALE)                 # load image and grayscale it
+    img = cv2.imread(str(digit)+".jpg", cv2.IMREAD_GRAYSCALE)              # load image and grayscale it
 
     blur = cv2.GaussianBlur(img,(5,5),0)                                   # apply Gaussian Blur
 
@@ -23,11 +23,8 @@ for digit in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
     images.append(imCrop)                                                  # append image to list
     labels.append(digit)
     im = Image.fromarray(images[i])                  # convert array to PIL image
-    im.save("extract{}.jpg".format(digit))                                                  # append dagit/label to list
+    im.save("extract{}.jpg".format(digit))           # append dagit/label to list
     i += 1
-
-#im = Image.fromarray(images[0])                  # convert array to PIL image
-#im.save("extract9.jpg")                          # save PIL image and convert it to .jpg
 
 ################################################################################
 # find the center of digit extract and put it in center of new square image
@@ -43,10 +40,10 @@ def findCenter(img):
     cY = int(M["m01"] / M["m00"])
     return (cX,cY)
 
-for m in range(len(images)):
+for m in range(len(labels)):
 
     img1 = cv2.imread("blanko_.jpg")
-    img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.25, fy=0.25)
+    img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.19, fy=0.19)
 
     ## (1) Find centers
     pt1 = findCenter(img1)
@@ -68,7 +65,7 @@ for m in range(len(images)):
 # resize image to 28x28
 ####################################################################
 
-for img in range(len(images)):
+for img in range(len(labels)):
 
     image = Image.open("1_{}.png".format(labels[img])).convert('L')          # open image and again from 3 channels (RGB) to 1 channel -> grayscale
 

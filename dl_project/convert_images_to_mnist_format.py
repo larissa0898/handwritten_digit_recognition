@@ -3,7 +3,6 @@ from PIL import Image
 from array import *
 from random import shuffle
 import numpy as np
-import gzip
 
 ####################################################################
 # load data and save it to
