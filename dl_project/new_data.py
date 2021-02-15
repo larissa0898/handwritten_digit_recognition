@@ -8,38 +8,33 @@ import cv2 as cv2
 import math
 
 
-""" images = []
+images = []
 labels = []
 i = 0
 #1, 4, 8, 9
-for no in [1]:
-    img = cv2.imread(str(no)+".jpg", cv2.IMREAD_GRAYSCALE)
-    print(img)
+for digit in [8]:
+    img = cv2.imread(str(digit)+".jpg", cv2.IMREAD_GRAYSCALE)                 # load image and grayscale it
 
-    blur = cv2.GaussianBlur(img,(5,5),0)
-    extract = cv2.selectROI(blur)
-    imCrop = blur[int(extract[1]):int(extract[1]+extract[3]), int(extract[0]):int(extract[0]+extract[2])]
-    images.append(imCrop)
-    labels.append(no)
+    blur = cv2.GaussianBlur(img,(5,5),0)                                   # apply Gaussian Blur
+
+    extract = cv2.selectROI(blur)                                          # extract digit with ROI
+    imCrop = blur[int(extract[1]):int(extract[1]+extract[3]), int(extract[0]):int(extract[0]+extract[2])]      # save it in varibale imCrop
+
+    images.append(imCrop)                                                  # append image to list
+    labels.append(digit)                                                   # append dagit/label to list
     i += 1
 
-#print(type(images[0]))
-#print(images[0])
-#print(labels)
+im = Image.fromarray(images[0])                  # convert array to PIL image
+im.save("extract8.jpg")                          # save PIL image and convert it to .jpg
 
-im = Image.fromarray(images[0])
-im.save("extract1.jpg") """
+################################################################################
+# find the center of digit extract and put it in center of new square image
+################################################################################
 
-""" 
-pyplot.imshow(images[0])
-pyplot.show()
-""" 
-""" def findCenter(img):
+def findCenter(img):
     print(img.shape, img.dtype)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     th, threshed = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY_INV|cv2.THRESH_OTSU)
-    #cv2.imshow("threshed", threshed);cv2.waitKey();cv2.destroyAllWindows()
-    #_, cnts, hierarchy = cv2.findContours(threshed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cv2.findContours(threshed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
     M = cv2.moments(cnts[0])
     cX = int(M["m10"] / M["m00"])
@@ -47,7 +42,7 @@ pyplot.show()
     return (cX,cY)
 
 img1 = cv2.imread("blanko_.jpg")
-img2 = cv2.resize(cv2.imread("extract1.jpg"), None, fx=0.3, fy=0.3)
+img2 = cv2.resize(cv2.imread("extract8.jpg"), None, fx=0.25, fy=0.25)
 
 ## (1) Find centers
 pt1 = findCenter(img1)
@@ -63,22 +58,23 @@ h,w = img2.shape[:2]
 dst = img1.copy()
 dst[dy:dy+h, dx:dx+w] = img2
 
-cv2.imwrite("eins.png", dst) """
+cv2.imwrite("1_8.png", dst)
 
-""" 
-pyplot.imshow()
-pyplot.show() """
+#####################################################################
+# resize image to 28x28
+####################################################################
 
-image = Image.open("eins.png").convert('L')
-
+image = Image.open("1_8.png").convert('L')          # open image and again from 3 channels (RGB) to 1 channel -> grayscale
 
 resized = image.resize((28,28))
 
-#pix = np.array(resized)
-#print(type(pix))
-#print(pix)
-#pyplot.imshow(pix)
-#pyplot.show()
+resized.save("final_8.png")
 
-#im = Image.fromarray(pix)
-resized.save("final_1.png")
+
+
+############################################################################
+# converting ubyte file from convert_images_tomnist_format into .pt file
+############################################################################
+
+# image = open("t10k-images-idx3-ubyte")
+#torch.save(image, 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\test_images\\testing\\test.pt')

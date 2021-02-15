@@ -3,9 +3,12 @@ from PIL import Image
 from array import *
 from random import shuffle
 import numpy as np
+import gzip
 
+####################################################################
+# load data and save it to
+####################################################################
 
-# Load from and save to
 Names = [['C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\training_images','train'], ['C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\test_images','test']]
 
 for name in Names:
@@ -14,7 +17,7 @@ for name in Names:
     data_label = array('B')
 
     FileList = []
-    for dirname in os.listdir(name[0]): # [1:] Excludes .DS_Store from Mac OS
+    for dirname in os.listdir(name[0]):
         path = os.path.join(name[0],dirname)
         for filename in os.listdir(path):
             if filename.endswith(".png"):
@@ -27,9 +30,9 @@ for name in Names:
         lastsplit=filesplit[9].split(".")
         label = int(lastsplit[0])
 
-        Im = Image.open(filename)
+        Img = Image.open(filename)
 
-        pixel = Im.load()
+        pixel = Img.load()
 
 
         width, height = Im.size
@@ -40,6 +43,11 @@ for name in Names:
                 i +=0
 
         data_label.append(label) # labels start (one unsigned byte each)
+
+
+####################################################################################
+# data to bytes
+####################################################################################
 
     hexval = "{0:#0{1}x}".format(len(FileList),6) # number of files in HEX
 
@@ -63,28 +71,30 @@ for name in Names:
 
     data_image = header + data_image
 
+#######################################################################
+# save data in .pt and ubyte files
+#######################################################################
+
+    pt_file= open(name[1]+'-test.pt', 'wb')
+    data_image.tofile(pt_file)
 
     output_file = open(name[1]+'-images-idx3-ubyte', 'wb')
     data_image.tofile(output_file)
-    #data_img = bytes(data_image)
-    #output_file.write(data_img)
+
     output_file.close()
+    pt_file.close()
+
+    pt_file = open(name[1]+'-test.pt','wb')
+    data_label.tofile(pt_file)
 
     output_file = open(name[1]+'-labels-idx1-ubyte', 'wb')
     data_label.tofile(output_file)
-    output_file.close()
 
-# gzip resulting files
+    output_file.close()
+    pt_file.close()
+
+""" # gzip resulting files
 
 for name in Names:
     os.system('gzip '+name[1]+'-images-idx3-ubyte')
-os.system('gzip '+name[1]+'-labels-idx1-ubyte')
-
-
-
-
-####
-#???
-####
-""" with open('/home/joe/file.txt', 'rb') as f_in, gzip.open('/home/joe/file.txt.gz', 'wb') as f_out:
-    f_out.writelines(f_in) """
+os.system('gzip '+name[1]+'-labels-idx1-ubyte') """
