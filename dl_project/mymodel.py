@@ -4,7 +4,10 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from PIL import Image
+from configparser import ConfigParser
 
+config = ConfigParser()
+config.read('config.ini')
 
 ####################################################################
 # creating transformer for DataLoader
@@ -15,19 +18,15 @@ transformer = transforms.Compose([
     transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])])
 
 
-
 ##################################################################
 # creating test and training DataLoaders
 ##################################################################
 
 batch_size=100
 
-train_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project'
-test_path = 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project'
-
 
 train_loader = DataLoader(
-        torchvision.datasets.MNIST(train_path, 
+        torchvision.datasets.MNIST(config['paths']['train_path'],    # for changing the path, change it in config.ini file
                             train=True, 
                             download=True, 
                             transform=transformer),
@@ -36,7 +35,7 @@ train_loader = DataLoader(
 
 
 test_loader = DataLoader(
-        torchvision.datasets.MNIST(test_path,
+        torchvision.datasets.MNIST(config['paths']['test_path'],     # for changing the path, change it in config.ini file
                             train=False,
                             download=True,
                             transform=transformer),
@@ -76,7 +75,7 @@ optim = torch.optim.Adam(model.parameters(), lr=0.001)     # best result with lr
 # train the model
 ##########################################################################
 
-""" for epoch in range(10):
+for epoch in range(10):
     running_loss = 0.0
     for i, data in enumerate(train_loader, 0):
         inputs, labels = data
@@ -89,7 +88,7 @@ optim = torch.optim.Adam(model.parameters(), lr=0.001)     # best result with lr
 
         running_loss += loss.item()
     else:
-        print("Epoch ", epoch, " - Training loss: ", running_loss/len(train_loader)) """
+        print("Epoch ", epoch, " - Training loss: ", running_loss/len(train_loader))
 
 
 
@@ -97,25 +96,26 @@ optim = torch.optim.Adam(model.parameters(), lr=0.001)     # best result with lr
 # saving model
 ######################################################################################
 
-#torch.save(model.state_dict(), 'C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\model.pt')
+torch.save(model.state_dict(), config['paths']['save_and_load_path'])          # for changing the path, change it in config.ini file
 
 
 
 
-#######################################################################################
+""" #######################################################################################
 # loading model
 ########################################################################################
 
-model.load_state_dict(torch.load('C:\\Users\\laris\\Desktop\\GitHub\\deep_learning_project\\dl_project\\model.pt'))
+model.load_state_dict(torch.load(config['paths']['save_and_load_path']))         # for changing the path, change it in config.ini file
 model.eval()
 
 
+ """
 
 #########################################################################################
 # testing model with test_data
 ##########################################################################################
 
-"""
+
 correct = 0
 total = 0
 with torch.no_grad():
@@ -128,9 +128,9 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-print(predicted)
+
 print('Accuracy of the network on test images: %d %%' % 
-    (100 * correct / total)) """
+    (100 * correct / total))
 
 
 
