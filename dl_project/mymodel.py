@@ -6,10 +6,14 @@ from torch.utils.data import DataLoader
 from PIL import Image
 
 
+####################################################################
+# creating transformer for DataLoader
+####################################################################
 
 transformer = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])])
+
 
 
 ##################################################################
@@ -31,25 +35,14 @@ train_loader = DataLoader(
         shuffle=True)
 
 
-""" test_loader = DataLoader(
+test_loader = DataLoader(
         torchvision.datasets.MNIST(test_path,
                             train=False,
-                            download=False,
+                            download=True,
                             transform=transformer),
         batch_size,
-        shuffle=True) """
+        shuffle=True)
 
-
-#################################################################################
-# loading own images to mnist dataset
-#################################################################################
-
-my_data = Image.open("4.png")        ##################HIIIIIEEEERRR!!!!!!!!!
-my_data = transformer(my_data)
-
-my_loader = DataLoader(
-    my_data,
-    shuffle=True)
 
 
 ######################################################################
@@ -67,6 +60,8 @@ model = nn.Sequential(nn.Linear(input_size, hidden_size1),
                       nn.ReLU(),
                       nn.Linear(hidden_size2, output_size))
 
+
+
 ##########################################################################
 # loss function and optimizer
 ##########################################################################
@@ -76,8 +71,9 @@ loss_f = nn.CrossEntropyLoss()
 optim = torch.optim.Adam(model.parameters(), lr=0.001)     # best result with lr=0.001
 
 
+
 ##########################################################################
-# training the model
+# train the model
 ##########################################################################
 
 """ for epoch in range(10):
@@ -94,6 +90,7 @@ optim = torch.optim.Adam(model.parameters(), lr=0.001)     # best result with lr
         running_loss += loss.item()
     else:
         print("Epoch ", epoch, " - Training loss: ", running_loss/len(train_loader)) """
+
 
 
 ######################################################################################
@@ -118,12 +115,12 @@ model.eval()
 # testing model with test_data
 ##########################################################################################
 
-#, torch.tensor([9])
+"""
 correct = 0
 total = 0
 with torch.no_grad():
-    for data in my_loader:
-        images, labels = data, torch.tensor([4])
+    for data in test_loader:
+        images, labels = data
         test_images = images.view(images.shape[0], -1)
 
         outputs = model(test_images)
@@ -133,4 +130,43 @@ with torch.no_grad():
 
 print(predicted)
 print('Accuracy of the network on test images: %d %%' % 
-    (100 * correct / total))
+    (100 * correct / total)) """
+
+
+
+#######################################################################
+# function for testing my own data
+#######################################################################
+
+def testingmydata (my_loader, label):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in my_loader:
+            images, labels = data, label
+            test_images = images.view(images.shape[0], -1)
+
+            outputs = model(test_images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    return predicted
+
+
+
+#################################################################################
+# loading own images
+#################################################################################
+
+digits = [0,1,2,3,4,5,6,7,8,9]
+
+for i in digits:
+    my_data = Image.open("{}.png".format(i)) 
+    my_data = transformer(my_data)
+
+    my_loader = DataLoader(
+        my_data,
+        shuffle=True)
+    label = torch.tensor([i])
+    print("image of {}:".format(i))
+    print("predicted:", testingmydata(my_loader, label))

@@ -1,33 +1,37 @@
 import torch
 from PIL import Image
-#from PIL import ImageShow
-#from matplotlib import image
-#from matplotlib import pyplot
 import numpy as np
 import cv2 as cv2
-#import math
 
+""" this code prepares images for the model. 
+The images have to look like this: 
+                                - black background with white digit
+                                - have to be named like e.g. 'initial0.jpg
+                                - would be good to be cropped already into a square size
+"""
 
 images = []
 labels = []
 i = 0
 
-for digit in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
-    img = cv2.imread(str(digit)+".jpg", cv2.IMREAD_GRAYSCALE)              # load image and grayscale it
+for digit in [2]:
+    img = cv2.imread("initial{}.jpg".format(digit))       # load image
 
-    blur = cv2.GaussianBlur(img,(5,5),0)                                   # apply Gaussian Blur
+    blur = cv2.GaussianBlur(img,(5,5),0)               # apply Gaussian Blur
 
-    extract = cv2.selectROI(blur)                                          # extract digit with ROI
-    imCrop = blur[int(extract[1]):int(extract[1]+extract[3]), int(extract[0]):int(extract[0]+extract[2])]      # save it in varibale imCrop
+    extract = cv2.selectROI(blur)                         # extract digit with ROI
+    imCrop = blur[int(extract[1]):int(extract[1]+extract[3]), int(extract[0]):int(extract[0]+extract[2])]      # save it in variable imCrop
 
-    images.append(imCrop)                                                  # append image to list
-    labels.append(digit)
-    im = Image.fromarray(images[i])                  # convert array to PIL image
-    im.save("extract{}.jpg".format(digit))           # append dagit/label to list
+    images.append(imCrop)                        # append image to list
+    labels.append(digit)                         # append digit/label to list 
+    im = Image.fromarray(images[i])                # convert array to PIL image
+    im.save("extract{}.jpg".format(digit))          
     i += 1
 
+
+
 ################################################################################
-# find the center of digit extract and put it in center of new square image
+# find the center of digit, extract and put it in center of new square image
 ################################################################################
 
 def findCenter(img):
@@ -43,7 +47,7 @@ def findCenter(img):
 for m in range(len(labels)):
 
     img1 = cv2.imread("blanko_.jpg")
-    img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.19, fy=0.19)
+    img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.2, fy=0.2)
 
     ## (1) Find centers
     pt1 = findCenter(img1)
@@ -61,17 +65,18 @@ for m in range(len(labels)):
 
     cv2.imwrite("1_{}.png".format(labels[m]), dst)
 
+
 #####################################################################
 # resize image to 28x28
 ####################################################################
 
 for img in range(len(labels)):
 
-    image = Image.open("1_{}.png".format(labels[img])).convert('L')          # open image and again from 3 channels (RGB) to 1 channel -> grayscale
+    image = Image.open("1_{}.png".format(labels[img])).convert('L')          # open image and grayscale it
 
     resized = image.resize((28,28))
 
-    resized.save("final_{}.png".format(labels[img]))
+    resized.save("{}.png".format(labels[img]))
 
 
 

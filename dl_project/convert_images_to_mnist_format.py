@@ -34,7 +34,7 @@ for name in Names:
         pixel = Img.load()
 
 
-        width, height = Im.size
+        width, height = Img.size
         i = 0
         for x in range(0,width):
             for y in range(0,height):
@@ -91,9 +91,3 @@ for name in Names:
 
     output_file.close()
     pt_file.close()
-
-""" # gzip resulting files
-
-for name in Names:
-    os.system('gzip '+name[1]+'-images-idx3-ubyte')
-os.system('gzip '+name[1]+'-labels-idx1-ubyte') """
