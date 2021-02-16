@@ -7,7 +7,6 @@ import cv2 as cv2
 The images have to look like this: 
                                 - black background with white digit
                                 - have to be named like e.g. 'initial0.jpg
-                                - would be good to be cropped already into a square size
 """
 
 images = []
