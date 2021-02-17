@@ -116,7 +116,7 @@ model.eval()
 ##########################################################################################
 
 
-correct = 0
+""" correct = 0
 total = 0
 with torch.no_grad():
     for data in test_loader:
@@ -127,10 +127,13 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
+        print("predicted: ", predicted)
+        print("labels: ", labels)
+        print("---------------------")
 
 
 print('Accuracy of the network on test images: %d %%' % 
-    (100 * correct / total))
+    (100 * correct / total)) """
 
 
 

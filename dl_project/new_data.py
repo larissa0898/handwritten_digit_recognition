@@ -1,5 +1,6 @@
 import torch
 from PIL import Image
+from PIL import ImageOps
 import numpy as np
 import cv2 as cv2
 
@@ -13,8 +14,13 @@ images = []
 labels = []
 i = 0
 
-for digit in [2]:
-    img = cv2.imread("initial{}.jpg".format(digit))       # load image
+for digit in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+    img = Image.open("{}.jpg".format(digit))
+    #img = ImageOps.invert(img)
+    #img = ImageOps.fit(img, (128,128), bleed=0.06)
+    img.save("initiall{}.jpg".format(digit))
+
+    img = cv2.imread("initiall{}.jpg".format(digit))       # load image
 
     blur = cv2.GaussianBlur(img,(5,5),0)               # apply Gaussian Blur
 
@@ -43,11 +49,17 @@ def findCenter(img):
     cY = int(M["m01"] / M["m00"])
     return (cX,cY)
 
+img1 = Image.open("blanko_.jpg")
+img1 = ImageOps.invert(img1)
+img1 = ImageOps.fit(img1, (28,28))
+img1.save("blanko.jpg")
+
+
 for m in range(len(labels)):
 
-    img1 = cv2.imread("blanko_.jpg")
-    img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.2, fy=0.2)
-
+    img1 = cv2.imread("blanko.jpg")
+    #img2 = cv2.resize(cv2.imread("extract{}.jpg".format(labels[m])), None, fx=0.9, fy=0.9)
+    img2 = cv2.imread("extract{}.jpg".format(labels[m]))
     ## (1) Find centers
     pt1 = findCenter(img1)
     pt2 = findCenter(img2)
@@ -75,7 +87,7 @@ for img in range(len(labels)):
 
     resized = image.resize((28,28))
 
-    resized.save("{}.png".format(labels[img]))
+    resized.save("final{}.png".format(labels[img]))
 
 
 
