@@ -141,18 +141,18 @@ print('Accuracy of the network on test images: %d %%' %
 # function for testing my own data
 #######################################################################
 
-def testingmydata (my_loader, label):
-    correct = 0
-    total = 0
+def testingmydata (my_loader):
+    #correct = 0
+    #total = 0
     with torch.no_grad():
         for data in my_loader:
-            images, labels = data, label
+            images = data
             test_images = images.view(images.shape[0], -1)
 
             outputs = model(test_images)
             _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+            #total += labels.size(0)
+            #correct += (predicted == labels).sum().item()
     return predicted
 
 
@@ -162,14 +162,22 @@ def testingmydata (my_loader, label):
 #################################################################################
 
 digits = [0,1,2,3,4,5,6,7,8,9]
-
+correct = 0
+total = 0
 for i in digits:
-    my_data = Image.open("{}.png".format(i)) 
+    my_data = Image.open("{}.jpg".format(i)) 
     my_data = transformer(my_data)
 
     my_loader = DataLoader(
         my_data,
         shuffle=True)
     label = torch.tensor([i])
+    predicted = testingmydata(my_loader)
+
     print("image of {}:".format(i))
-    print("predicted:", testingmydata(my_loader, label))
+    print("predicted:", predicted)
+    
+    correct += (predicted == label).sum()
+    total += 1
+
+print(float(correct)/total*100)
