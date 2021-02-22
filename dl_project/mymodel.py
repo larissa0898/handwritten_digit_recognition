@@ -151,8 +151,6 @@ def testingmydata (my_loader):
 
             outputs = model(test_images)
             _, predicted = torch.max(outputs.data, 1)
-            #total += labels.size(0)
-            #correct += (predicted == labels).sum().item()
     return predicted
 
 
@@ -162,6 +160,7 @@ def testingmydata (my_loader):
 #################################################################################
 
 digits = [0,1,2,3,4,5,6,7,8,9]
+
 correct = 0
 total = 0
 for i in digits:
