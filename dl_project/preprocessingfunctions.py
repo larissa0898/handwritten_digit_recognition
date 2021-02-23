@@ -1,8 +1,8 @@
-import torch
 from PIL import Image
 from PIL import ImageOps
-import numpy as np
 import cv2 as cv2
+import numpy as np
+import scipy.ndimage as ndi
 from scipy.ndimage import center_of_mass
 import matplotlib.image as mpimg
 
@@ -12,7 +12,8 @@ import matplotlib.image as mpimg
 ###########################################################
 
 def secondpreprocessing(image):
-    img = ImageOps.invert(image)               # invert image from white/black to black/white
+    img = Image.fromarray(image)
+    img = ImageOps.invert(img)               # invert image from white/black to black/white
     img = ImageOps.grayscale(img)              # grayscale the image
 
     img = ImageOps.fit(img, (20,20), Image.ANTIALIAS, bleed=0.06)    # image to 20x20, anti-alias technique and delete unnecessary black pixel at the border
@@ -38,36 +39,25 @@ def findCenter(img):
 
 
 def firstpreprocessing(image):
-    img = ImageOps.invert(image)
-    img.save("initiall.jpg")
-
-    img = cv2.imread("initiall.jpg")       # load image
-
-    blur = cv2.GaussianBlur(img,(5,5),0)      # apply Gaussian Blur
-
-    extract = cv2.selectROI(blur)                         # extract digit with ROI
-    imCrop = blur[int(extract[1]):int(extract[1]+extract[3]), int(extract[0]):int(extract[0]+extract[2])]      # save it in variable imCrop
- 
-    im = Image.fromarray(imCrop)          # convert array to PIL image
-    im.save("extract.jpg")          
-
-
-    # find the center of digit, extract and put it in center of new square image
-
-    img1 = Image.open("blanko_.jpg")
-    img1 = ImageOps.invert(img1)
-    img1 = ImageOps.fit(img1, (28,28))
-    img1.save("blanko.jpg")
+    mg = ~image
+    mg = cv2.GaussianBlur(mg,(19,19),0)
 
     img1 = cv2.imread("blanko.jpg")
-    img2 = cv2.imread("extract.jpg")
+    img1 = ~img1                  # invert image
+
+    img2 = cv2.resize(mg, None, fx=0.77, fy=0.77)
+    cv2.imwrite("initiall.jpg", img2)
+
+    img2 = mpimg.imread("initiall.jpg")
+
     ## (1) Find centers
     pt1 = findCenter(img1)
-    pt2 = findCenter(img2)
+    pt2 = ndi.center_of_mass(img2)
 
+    img2 = cv2.imread("initiall.jpg")
     ## (2) Calc offset
-    dx = pt1[0] - pt2[0]
-    dy = pt1[1] - pt2[1]
+    dx = pt1[0] - int(pt2[0])
+    dy = pt1[1] - int(pt2[1])
 
     ## (3) do slice-op `paste`
     h,w = img2.shape[:2]
@@ -75,12 +65,12 @@ def firstpreprocessing(image):
     dst = img1.copy()
     dst[dy:dy+h, dx:dx+w] = img2
 
-    cv2.imwrite("laststep.png".format(labels[m]), dst)
+    cv2.imwrite("laststep.jpg", dst)
 
 
     # resize image to 28x28
 
-    image = Image.open("laststep.png".format(labels[img])).convert('L')          # open image and grayscale it
+    image = Image.open("laststep.jpg").convert('L')         # open image and grayscale it
 
     resized = image.resize((28,28))
 

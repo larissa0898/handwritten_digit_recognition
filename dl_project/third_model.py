@@ -1,23 +1,21 @@
-import numpy as np
-from matplotlib import pyplot as plt
-from torchvision import datasets, transforms
-
+import click
+import cv2 as cv2
 import torch
 from torch import nn
 from torch import optim
-import torchvision
-import torch.nn.functional as F
+from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from configparser import ConfigParser
-from model_zu_third import Network
-from PIL import Image
-from preprocessingfunctions import secondpreprocessing
+from model_zu_third import Net, train_model, testingmydata
+from preprocessingfunctions import firstpreprocessing, secondpreprocessing
+
 
 
 config = ConfigParser()
 config.read('config.ini')
 
 batch_size = 64
+
 ######################################################
 # transformer for DataLoader
 ###################################################
@@ -26,157 +24,91 @@ transform = transforms.Compose([
                                 transforms.Normalize((0.1307,),(0.3081,))
                                 ])
 
-#####################################################################################
-# data sets train and test
-####################################################################################
-train_set = torchvision.datasets.MNIST(config['paths']['train_path'],
-                            train=True, 
-                            download=True, 
-                            transform=transform)
-
-test_set = torchvision.datasets.MNIST(config['paths']['test_path'],     # for changing the path, change it in config.ini file
-                            train=False,
-                            download=True,
-                            transform=transform)
-
 ###############################################################################
 # DataLoaders
 ###############################################################################
 train_loader = DataLoader(
-        train_set,    
+        datasets.MNIST(config['paths']['train_path'],      # for changing the path, change it in config.ini file
+                            train=True, 
+                            download=True, 
+                            transform=transform),    
         batch_size, 
         shuffle=True)
 
 
 test_loader = DataLoader(
-        test_set,
+        datasets.MNIST(config['paths']['test_path'],     # for changing the path, change it in config.ini file
+                            train=False,
+                            download=True,
+                            transform=transform),
         batch_size,
         shuffle=True)
 
+###################################################################################
+# create model, opitmizer and loss function object
+##################################################################################
 
-
-model = Network()
-
+model = Net()
 
 optimizer = optim.SGD(model.parameters(), lr=0.01)
-criterion = nn.CrossEntropyLoss()
+loss_func = nn.CrossEntropyLoss()
 
 
+###########################################################################
+# Do you want to train a new model? 
+# Y - training function is called
+# n - old model will be loaded into script
+########################################################################### 
 
-epochs = 20
-train_loss, val_loss = [], []
-accuracy_total_train, accuracy_total_val = [], []
+if click.confirm('Do you want to train a new model?', default=True):
+    train_model(model, 20, optimizer, train_loader, loss_func)
 
-""" for epoch in range(epochs):
-   
-    total_train_loss = 0
-    total_val_loss = 0
 
-    model.train()
-    
-    total = 0
-    # training our model
-    for idx, (image, label) in enumerate(train_loader):
-
-        image, label = image, label
-
-        optimizer.zero_grad()
-
-        pred = model(image)
-
-        loss = criterion(pred, label)
-        total_train_loss += loss.item()
-
-        loss.backward()
-        optimizer.step()
-
-        pred = torch.nn.functional.softmax(pred, dim=1)
-        for i, p in enumerate(pred):
-            if label[i] == torch.max(p.data, 0)[1]:
-                total = total + 1
-                
-    accuracy_train = total / len(train_set)
-    accuracy_total_train.append(accuracy_train)
-
-    total_train_loss = total_train_loss / (idx + 1)
-    train_loss.append(total_train_loss)
-
-torch.save(model.state_dict(), config['paths']['save_and_load_path']) """
-
+##########################################################################
+# load trained model
+##########################################################################
 
 model.load_state_dict(torch.load(config['paths']['save_and_load_path']))
 
+
+##########################################################
+# test model with MNIST test set
 ##########################################################
 model.eval()
 total = 0
-for idx, (image, label) in enumerate(test_loader):
+correct = 0
+for i, (image, label) in enumerate(test_loader):
     image, label = image, label
-    pred = model(image)
-    loss = criterion(pred, label)
-    #total_val_loss += loss.item()
-
-    pred = torch.nn.functional.softmax(pred, dim=1)
-    for i, p in enumerate(pred):
-        if label[i] == torch.max(p.data, 0)[1]:
-            total = total + 1
-
-    accuracy_val = total / len(test_set)
-    #print("accuracy test: ", accuracy_val)
-
-#total_val_loss = total_val_loss / (idx + 1)
-#val_loss.append(total_val_loss)
-""" 
-    if epoch % 5 == 0:
-        print("Epoch: {}/{}  ".format(epoch, epochs),
-            "Training loss: {:.4f}  ".format(total_train_loss),
-            "Testing loss: {:.4f}  ".format(total_val_loss),
-            "Train accuracy: {:.4f}  ".format(accuracy_train),
-            "Test accuracy: {:.4f}  ".format(accuracy_val)) """
-
-#######################################################################
-# function for testing my own data
-#######################################################################
-
-def testingmydata (my_loader):
-    with torch.no_grad():
-        for data in my_loader:
-            images = data.view(1,1,28,28)
-            #test_images = images.view(1,1,28,28)
-
-            outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
-    return predicted
+    output = model(image)
+    loss = loss_func(output, label)
 
 
-################################################################################
-# pre-processing my images
-################################################################################
+    for j, predicted in enumerate(output):
+        if label[j] == torch.max(predicted.data, 0)[1]:
+            correct += 1
+        total += 1
 
-
-""" for i in digits:
-    image = Image.open("initial{}.jpg".format(i))
-    img = secondpreprocessing(image)
-    img.save("{}.jpg".format(i)) """
+print("Accuracy of test images: ", (correct / total)*100, "%")
 
 
 
 #################################################################################
-# loading own images and pre-processing them
+# loading own images and pre-process them
 #################################################################################
 digits = [0,1,2,3,4,5,6,7,8,9]
 
 correct = 0
 total = 0
 for i in digits:
-    image = Image.open("initial{}.jpg".format(i))
-    my_data = secondpreprocessing(image)
+    image = cv2.imread("initial{}.jpg".format(i))
+    my_data = firstpreprocessing(image)                # if you want another preprocessing, then simply replace 'firstpreprocessing' with 'secondpreprocessing'
     my_data = transform(my_data)
 
     my_loader = DataLoader(
         my_data)
     
     label = torch.tensor([i])
-    predicted = testingmydata(my_loader)
+    predicted = testingmydata(my_loader, model)
 
 
     print("image of {}:".format(i))
