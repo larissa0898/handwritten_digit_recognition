@@ -8,23 +8,6 @@ import matplotlib.image as mpimg
 
 
 ###########################################################
-# zweite Variante des Pre-Processings
-###########################################################
-
-def secondpreprocessing(image):
-    img = Image.fromarray(image)
-    img = ImageOps.invert(img)               # invert image from white/black to black/white
-    img = ImageOps.grayscale(img)              # grayscale the image
-
-    img = ImageOps.fit(img, (20,20), Image.ANTIALIAS, bleed=0.06)    # image to 20x20, anti-alias technique and delete unnecessary black pixel at the border
-
-    img2 = ImageOps.fit(img, (28,28))            # image to 28x28
-
-    return img2
-
-
-
-###########################################################
 # erste Variante des Pre-Processings
 ###########################################################
 
@@ -75,3 +58,20 @@ def firstpreprocessing(image):
     resized = image.resize((28,28))
 
     return resized
+
+
+
+###########################################################
+# zweite Variante des Pre-Processings
+###########################################################
+
+def secondpreprocessing(image):
+    img = Image.fromarray(image)
+    img = ImageOps.invert(img)               # invert image from white/black to black/white
+    img = ImageOps.grayscale(img)              # grayscale the image
+
+    img = ImageOps.fit(img, (20,20), Image.ANTIALIAS, bleed=0.06)    # image to 20x20, anti-alias technique and delete unnecessary black pixel at the border
+
+    img2 = ImageOps.fit(img, (28,28))            # image to 28x28
+
+    return img2

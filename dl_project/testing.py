@@ -6,7 +6,7 @@ from torch import optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from configparser import ConfigParser
-from model_zu_third import Net, train_model, testingmydata
+from model import Net, train_model, testingmydata
 from preprocessingfunctions import firstpreprocessing, secondpreprocessing
 
 
@@ -88,7 +88,7 @@ for i, (image, label) in enumerate(test_loader):
             correct += 1
         total += 1
 
-print("Accuracy of test images: ", (correct / total)*100, "%")
+print("\nACCURACY OF MNIST TEST IMAGES: {}%\n".format((correct / total)*100))
 
 
 
@@ -99,9 +99,10 @@ digits = [0,1,2,3,4,5,6,7,8,9]
 
 correct = 0
 total = 0
+print("Own input images and corresponding prediction: \n")
 for i in digits:
     image = cv2.imread("initial{}.jpg".format(i))
-    my_data = firstpreprocessing(image)                # if you want another preprocessing, then simply replace 'firstpreprocessing' with 'secondpreprocessing'
+    my_data = secondpreprocessing(image)                # if you want another preprocessing, then simply replace 'firstpreprocessing' with 'secondpreprocessing'
     my_data = transform(my_data)
 
     my_loader = DataLoader(
@@ -112,9 +113,9 @@ for i in digits:
 
 
     print("image of {}:".format(i))
-    print("predicted:", predicted)
+    print("predicted: {}\n".format(predicted.item()))
     
     correct += (predicted == label).sum()
     total += 1
 
-print(float(correct)/total*100)
+print("ACCURACY OF OWN IMAGES: {}%".format(float(correct)/total*100))

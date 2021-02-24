@@ -1,13 +1,12 @@
 # deep_learning_project
 
-#### To execute the code in 'mymodel.py', all files have to be in the same folder. The paths of 'train_path' and 'test_path' and of loading and saving the model need to be adapted, when the files were downloaded.
-#### The model has already been trained with 60.000 train images and is saved in the file 'model.pt'. It just needs to be loaded into the code again.
-#### When testing with the 10.000 test images of the MNIST dataset, the appropriate section of the code ('testing model with test_data') needs to be uncommented and the code can be executed.
-#### When testing with my own data, the considered images have to be in the same folder as the 'mymodel.py' file. You can choose beetween 10 images of my own handwriting, 10 images of a third person's handwriting and 10 images of a MNIST-like handwriting, where I tried to imitate the handwriting of most of the MNIST images, because it was obvious that the digits of MNIST have a pretty similar appearance. For example, most of the 'ones' look like this: ![MNIST One](/dl_project/M1.png)
-
-#### While mine look like this: ![My One](/dl_project/L1.png)
-#### * When I tested my data, I recognized the following:
-                                       * my handwriting: 4/10 images correctly predicted
-                                       * third person's handwriting: 3/10 images correctly predicted
-                                       * MNIST-like handwriting: 8/10 images correctly predicted
-
+#### Step 1: Download all the files on this GitHub repository.
+#### Step 2: With 'pip install -r requirements.txt' all relevant libraries are installed. ![Step1](/dl_project/step1.png)
+#### Step 3: Change the paths in the 'config.ini' file. ![Step2](/dl_project/step2.png)
+#### Step 4: Now you can run the code in 'testing.py'. You can decide, whether you want to train a new model or use an old model.
+####         'Y' for training a new model. 'n' for loading old model. ![Step3](/dl_project/step3.png)
+#### Step 5: After that the accuracy of the MNIST test images will be printed in the command propt as well as my own images with the corresponding predictionb of the model and the total accuracy of all my own images in the end. ![Step4](/dl_project/step4.png)
+#### Step 6: There are two different preprocessing functions ('firstpreprocessing' and 'secondpreprocessing'), which can be used for my own images. Just change it in 'testing.py' in line 105, if you want to use the other pre-processing function.
+                                       * 'firstpreprocessing' yields better results than 'secondpreprocessing', that's why my guess is that my pre-processing is different from the one for the MNIST dataset. ![Step5](/dl_project/step5.png)
+#### Step 7: You can also use different images. Just delete the images, which are currently in the same folder ('dl_project') like the '.py' files, and choose another folder ('images1', 'images2', 'images3',...) and copy the images in the same folder ('dl_project') as the '.py' files. Then run the 'testing.py'-file with the prefered preprocessing function. ![Step10](/dl_project/step10.png) ![Step8](/dl_project/step8.png) ![Step9](/dl_project/step9.png)
+                                       * By default there are images of the folder 'images2' in the 'dl_project' folder.

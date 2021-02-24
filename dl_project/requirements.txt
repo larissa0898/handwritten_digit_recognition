@@ -1,9 +1,9 @@
 click
-cv2
+opencv-python
 torch
 torchvision
 configparser
-PIL
+Pillow
 numpy
 scipy
 matplotlib
