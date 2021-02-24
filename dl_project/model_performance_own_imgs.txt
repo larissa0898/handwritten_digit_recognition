@@ -1,0 +1,64 @@
+SECONDPREPROCESSING
+
+erstes Model:
+
+luca dick : 8 von 10, 9 als 4 und 7 als 1
+images works: 9 von 10, 6 als 5
+larissa dick: 9 von 10, 9 als 3
+larissa 70-80: 7 von 10, 1 als 7, 6 als 5, 9 als 4
+images 90: 8 von 10, 1 als 4, 9 als 3
+luca 80: 9 von 10, 7 als 2
+
+Accuracy: 83,3333%
+
+
+
+zweites Model:
+
+luca dick : 8 von 10, 7 als 1 und 9 als 4
+images works: 10 von 10
+larissa dick: 8 von 10, 1 als 4 und 9 als 4
+larissa 70-80: 7 von 10, 1 als 4 und 7 als 1 und 9 als 4
+images 90: 8 von 10, 1 als 4 und 9 als 8
+luca 80: 8 von 10, 7 als 2 und 9 als 4
+
+Accuracy: 81,6666%
+
+
+
+FIRSTPREPROCESSING
+
+ROI
+zweites Model:
+luca dick : 9 von 10, 7 als 2
+images works: 10 von 10
+larissa dick: 8 von 10, 7 als 9 und 5 als 9
+larissa 70-80: 8 von 10, 1 als 4 und 7 als 9
+images 90: 10 von 10
+luca 80: 8 von 10, 0 als 9 und 7 als 2
+
+Accuracy: 88,3333 %
+
+
+center of mass instead of ROI
+drittes Model:
+luca dick : 10 von 10
+images works: 10 von 10
+larissa dick: 8 von 10, 1 als 4 und 9 als 8
+larissa 70-80: 9 von 10, 9 als 8
+images 90: 10 von 10
+luca 80: 7 von 10, 0 als 9 und 6 als 5 und 9 als 8
+
+Accuracy: 90%
+
+
+center of mass instead of ROI
+viertes Model:
+luca dick : 10 von 10                                            10
+images works: 10 von 10                                          10
+larissa dick: 8 von 10, 1 als 4 und 9 als 8                       8
+larissa 70-80: 7 von 10, 4 als 1 und 8 als 3 und 9 als 8          8
+images 90: 9 von 10, 1 als 4                                      9
+luca 80: 8 von 10, 0 als 7 und 9 als 7                            8  = 88 %
+
+Accuracy: 86,6666%

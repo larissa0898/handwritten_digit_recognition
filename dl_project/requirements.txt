@@ -1,0 +1,9 @@
+click
+cv2
+torch
+torchvision
+configparser
+PIL
+numpy
+scipy
+matplotlib
