@@ -1,4 +1,5 @@
 import click
+import os
 import cv2 as cv2
 import torch
 from torch import nn
@@ -101,8 +102,8 @@ correct = 0
 total = 0
 print("Own input images and corresponding prediction: \n")
 for i in digits:
-    image = cv2.imread("initial{}.jpg".format(i))
-    my_data = secondpreprocessing(image)                # if you want another preprocessing, then simply replace 'firstpreprocessing' with 'secondpreprocessing'
+    image = cv2.imread(os.path.join(config['images']['images1'],"initial{}.jpg".format(i)))  # if you want to pre-process other images, change 'images1' to 'images2' or 'images3',...
+    my_data = secondpreprocessing(image)                # if you want another pre-processing, simply replace 'firstpreprocessing' with 'secondpreprocessing'
     my_data = transform(my_data)
 
     my_loader = DataLoader(
