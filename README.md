@@ -26,5 +26,5 @@
 ![Step5](/dl_project/step5.PNG)
 
 #### Step 7: 
-##### You can also use different images. Just change 'images1' to 'images2' or 'images3',....  ![Step11](/dl_project/step10.PNG)  ![Step12](/dl_project/step11.PNG)
+##### You can also use different images. Just change 'images1' to 'images2' or 'images3',....  ![Step11](/dl_project/step11.PNG)  ![Step12](/dl_project/step12.PNG)
 
