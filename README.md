@@ -9,7 +9,7 @@
 ##### With 'pip install -r requirements.txt' all relevant libraries are installed. ![Step1](/dl_project/step1.PNG)
 
 #### Step 3: 
-##### Change the paths in the 'config.ini' file. ![Step2](/dl_project/step2.PNG)
+##### Change the paths in the 'config.ini' file. ![Step13](/dl_project/step13.PNG)
 
 #### Step 4: 
 ##### Now you can run the code in 'testing.py'. You can decide, whether you want to train a new model or use an old model.
