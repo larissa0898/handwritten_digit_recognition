@@ -7,6 +7,20 @@ from scipy.ndimage import center_of_mass
 import matplotlib.image as mpimg
 
 
+###################################################################
+# cropping function
+##################################################################
+
+# uncomment lines 38-40 or line 86, if you want to use this function
+
+""" def crop_center(img, crop_width, crop_height):
+    img_width, img_height = img.size
+    return img.crop(((img_width - crop_width) // 2,
+                         (img_height - crop_height) // 2,
+                         (img_width + crop_width) // 2,
+                         (img_height + crop_height) // 2)) """
+
+
 ###########################################################
 # erste Variante des Pre-Processings
 ###########################################################
@@ -20,8 +34,10 @@ def findCenter(img):
     cY = int(M["m01"] / M["m00"])
     return (cX,cY)
 
-
 def firstpreprocessing(image):
+    """ image = Image.fromarray(image)                              # uncomment line 38-40, if you want to use the cropping function
+    image = crop_center(image, 820,820)    
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR) """
     mg = ~image
     mg = cv2.GaussianBlur(mg,(19,19),0)
 
@@ -66,7 +82,8 @@ def firstpreprocessing(image):
 ###########################################################
 
 def secondpreprocessing(image):
-    img = Image.fromarray(image)
+    img = Image.fromarray(image)                              
+    #img = crop_center(img, 820,820)        # uncomment this line, if you want to use the cropping function
     img = ImageOps.invert(img)               # invert image from white/black to black/white
     img = ImageOps.grayscale(img)              # grayscale the image
 
