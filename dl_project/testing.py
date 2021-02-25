@@ -8,7 +8,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from configparser import ConfigParser
 from model import Net, train_model, testingmydata
-from preprocessingfunctions import firstpreprocessing, secondpreprocessing
+from preprocessingfunctions import firstpreprocessing, secondpreprocessing, show_train_images
 
 
 
@@ -44,6 +44,17 @@ test_loader = DataLoader(
                             transform=transform),
         batch_size,
         shuffle=True)
+
+
+###########################################################################
+# Do you want to see some of the MNIST images? 
+# Y - 6 images will be shown
+# n - programm runs further
+########################################################################### 
+
+if click.confirm('Do you want to see some of the MNIST images?', default=True):
+    show_train_images(train_loader)
+
 
 ###################################################################################
 # create model, opitmizer and loss function object
@@ -101,22 +112,26 @@ digits = [0,1,2,3,4,5,6,7,8,9]
 correct = 0
 total = 0
 print("Own input images and corresponding prediction: \n")
-for i in digits:
-    image = cv2.imread(os.path.join(config['images']['images1'],"initial{}.jpg".format(i)))  # if you want to pre-process other images, change 'images1' to 'images2' or 'images3',...
-    my_data = firstpreprocessing(image)                # if you want another pre-processing, simply replace 'firstpreprocessing' with 'secondpreprocessing'
-    my_data = transform(my_data)
 
-    my_loader = DataLoader(
-        my_data)
+for root, subdirectories, files in os.walk(config['image']['images']):           # iterates over all subdirectories and opens every image in each subdirectory
+    for subdirectory in subdirectories:                                          # to apply it to the model (total of 60 images)
+        folder = os.path.join(root, subdirectory)
+        for i in digits:
+            image = cv2.imread(os.path.join(folder,"initial{}.jpg".format(i)))              # if you want to pre-process other images, change 'images1' to 'images2' or 'images3',...
+            my_data = firstpreprocessing(image)                # if you want another pre-processing, simply replace 'firstpreprocessing' with 'secondpreprocessing'
+            my_data = transform(my_data)
+
+            my_loader = DataLoader(
+                my_data)
     
-    label = torch.tensor([i])
-    predicted = testingmydata(my_loader, model)
+            label = torch.tensor([i])
+            predicted = testingmydata(my_loader, model)
 
 
-    print("image of {}:".format(i))
-    print("predicted: {}\n".format(predicted.item()))
+            print("image of {}:".format(i))
+            print("predicted: {}\n".format(predicted.item()))
     
-    correct += (predicted == label).sum()
-    total += 1
+            correct += (predicted == label).sum()
+            total += 1
 
 print("ACCURACY OF OWN IMAGES: {}%".format(float(correct)/total*100))
