@@ -14,26 +14,26 @@ import matplotlib.pyplot as plt
 
 # uncomment lines 38-40 or line 86, if you want to use this function
 
-def crop_center(img, crop_width, crop_height):
+""" def crop_center(img, crop_width, crop_height):
     img_width, img_height = img.size
     return img.crop(((img_width - crop_width) // 2,
                          (img_height - crop_height) // 2,
                          (img_width + crop_width) // 2,
-                         (img_height + crop_height) // 2))
+                         (img_height + crop_height) // 2)) """
 
 
 ###########################################################
 # erste Variante des Pre-Processings
 ###########################################################
 
-""" def findCenter(img):
+def findCenter(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     th, threshed = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY_INV|cv2.THRESH_OTSU)
     cnts = cv2.findContours(threshed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
     M = cv2.moments(cnts[0])
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
-    return (cX,cY) """
+    return (cX,cY)
 
 def firstpreprocessing(image):
 """     if (image.shape[0] > 820 and image.shape[1] > 820):
