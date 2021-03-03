@@ -36,10 +36,11 @@ def findCenter(img):
     return (cX,cY)
 
 def firstpreprocessing(image):
-"""     if (image.shape[0] > 820 and image.shape[1] > 820):
-        image = Image.fromarray(image)                        # uncomment line 38-42, if you want to use the cropping function
-        image = crop_center(image, 820,820)    
-        image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR) """
+#if (image.shape[0] > 820 and image.shape[1] > 820):
+#image = Image.fromarray(image)                        # uncomment line 38-42, if you want to use the cropping function
+#image = crop_center(image, 820,820)   
+#image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+
     mg = ~image                # invert image
     mg = cv2.GaussianBlur(mg,(31,31),0)
 
@@ -86,8 +87,8 @@ def firstpreprocessing(image):
 
 def secondpreprocessing(image):
     img = Image.fromarray(image)    
-"""     if (image.shape[0] > 820 and image.shape[1] > 820):                          
-        img = crop_center(img, 820,820)        # uncomment lines 89 and 90, if you want to use the cropping function """
+# if (image.shape[0] > 820 and image.shape[1] > 820):                          
+#        img = crop_center(img, 820,820)        # uncomment lines 89 and 90, if you want to use the cropping function
     img = ImageOps.invert(img)               # invert image from white/black to black/white
     img = ImageOps.grayscale(img)              # grayscale the image
 

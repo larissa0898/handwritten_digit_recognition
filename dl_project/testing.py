@@ -15,7 +15,7 @@ from preprocessingfunctions import firstpreprocessing, secondpreprocessing, show
 config = ConfigParser()
 config.read('config.ini')
 
-batch_size = 64
+batch_size = 100      # batch size von 64 auf 100 geändert
 
 ######################################################
 # transformer for DataLoader
@@ -62,7 +62,7 @@ if click.confirm('Do you want to see some of the MNIST images?', default=True):
 
 model = Net()
 
-optimizer = optim.SGD(model.parameters(), lr=0.01)
+optimizer = optim.SGD(model.parameters(), lr=0.02)    # lr von 0.1 auf 0.2 geändert
 loss_func = nn.CrossEntropyLoss()
 
 
