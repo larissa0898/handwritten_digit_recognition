@@ -29,7 +29,8 @@ Now you can run the code in 'testing.py'. You can decide, whether you want to se
 #### Step 5: 
 After that the accuracy of the MNIST test images will be printed in the command prompt as well as my own images with the corresponding predictions of the model and the total accuracy of all my own images. 
 
-![Step4](/dl_project/step4.PNG)
+![Step1.1](/dl_project/step1.1.PNG)
+![Step1.2](/dl_project/step1.2.PNG)
 
 #### Step 6: 
 There are two different pre-processing functions ('firstpreprocessing' and 'secondpreprocessing'), which can be used for my own images. Just change it in 'testing.py' in line 121, if you want to use the other pre-processing function.
