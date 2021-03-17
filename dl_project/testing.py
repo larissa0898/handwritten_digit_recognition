@@ -9,13 +9,15 @@ from torch.utils.data import DataLoader
 from configparser import ConfigParser
 from model import Net, train_model, testingmydata
 from preprocessingfunctions import firstpreprocessing, secondpreprocessing, show_train_images
-
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 config = ConfigParser()
 config.read('config.ini')
 
-batch_size = 100      # batch size von 64 auf 100 geändert
+
+batch_size = 100
 
 ######################################################
 # transformer for DataLoader
@@ -26,7 +28,7 @@ transform = transforms.Compose([
                                 ])
 
 ###############################################################################
-# DataLoaders
+# DataLoaders for MNIST dataset
 ###############################################################################
 train_loader = DataLoader(
         datasets.MNIST(config['paths']['train_path'],      # for changing the path, change it in config.ini file
@@ -57,13 +59,14 @@ if click.confirm('Do you want to see some of the MNIST images?', default=True):
 
 
 ###################################################################################
-# create model, opitmizer and loss function object
+# create model, optimizer and loss function object and define the epochs
 ##################################################################################
 
 model = Net()
 
-optimizer = optim.SGD(model.parameters(), lr=0.02)    # lr von 0.1 auf 0.2 geändert
+optimizer = optim.SGD(model.parameters(), lr=0.02)
 loss_func = nn.CrossEntropyLoss()
+epochs = 20
 
 
 ###########################################################################
@@ -73,14 +76,14 @@ loss_func = nn.CrossEntropyLoss()
 ########################################################################### 
 
 if click.confirm('Do you want to train a new model?', default=True):
-    train_model(model, 20, optimizer, train_loader, loss_func)
+    train_model(model, epochs, optimizer, train_loader, loss_func)
 
 
 ##########################################################################
 # load trained model
 ##########################################################################
 
-model.load_state_dict(torch.load(config['paths']['save_and_load_path']))
+model.load_state_dict(torch.load(config['paths']['save_and_load_path']))    # for changing the path, change it in config.ini file
 
 
 ##########################################################
@@ -91,18 +94,15 @@ total = 0
 correct = 0
 for i, (image, label) in enumerate(test_loader):
     image, label = image, label
-    output = model(image)
+    output = model(image)                              # applies test images to the model
     loss = loss_func(output, label)
 
-
-    for j, predicted in enumerate(output):
-        if label[j] == torch.max(predicted.data, 0)[1]:
+    for j, predicted in enumerate(output):            # correctly recognized images and total images are summed up to get accuracy
+        if label[j] == torch.max(predicted.data, 0)[1]:    
             correct += 1
         total += 1
 
 print("\nACCURACY OF MNIST TEST IMAGES: {}%\n".format((correct / total)*100))
-
-
 
 #################################################################################
 # loading own images and pre-process them
@@ -117,19 +117,18 @@ for root, subdirectories, files in os.walk(config['image']['images']):          
     for subdirectory in subdirectories:                                          # to apply it to the model (total of 60 images)
         folder = os.path.join(root, subdirectory)
         for i in digits:
-            image = cv2.imread(os.path.join(folder,"initial{}.jpg".format(i)))              # if you want to pre-process other images, change 'images1' to 'images2' or 'images3',...
+            image = cv2.imread(os.path.join(folder,"initial{}.jpg".format(i)))   # 
             my_data = firstpreprocessing(image)                # if you want another pre-processing, simply replace 'firstpreprocessing' with 'secondpreprocessing'
-            my_data = transform(my_data)
+            my_data = transform(my_data)                       # transformer from line 25
 
-            my_loader = DataLoader(
+            my_loader = DataLoader(                            # own data is loaded with DataLoader
                 my_data)
     
-            label = torch.tensor([i])
-            predicted = testingmydata(my_loader, model)
+            label = torch.tensor([i])                          # images are arranged in a way, to open in order from 0 to 9, so labels always correspond to the current index with which images are opened (line 120)
+            predicted = testingmydata(my_loader, model)        # testingmydata-Function in 'model.py' is called
 
-
-            print("image of {}:".format(i))
-            print("predicted: {}\n".format(predicted.item()))
+            print("image of {}:".format(i))                    # prints the number, which is represented in the image
+            print("predicted: {}\n".format(predicted.item()))  # prints the predicted digit
     
             correct += (predicted == label).sum()
             total += 1

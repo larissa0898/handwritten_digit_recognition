@@ -41,7 +41,6 @@ class Net(nn.Module):
 def train_model(model, epochs, optimizer, train_loader, loss_func):
     """ Function for training a model.
      """
-
     for epoch in range(epochs):
    
         total_train_loss = 0
@@ -64,11 +63,14 @@ def train_model(model, epochs, optimizer, train_loader, loss_func):
             for i, predicted in enumerate(output):
                 if label[i] == torch.max(predicted.data, 0)[1]:
                     total = total + 1
-    torch.save(model.state_dict(), config['paths']['save_and_load_path'])
+    torch.save(model.state_dict(), config['paths']['save_and_load_path'])      # for changing the path, change it in config.ini file
 
 
 
 def testingmydata (my_loader, model):
+    """function for testing own data on 
+       the pre-trained model"""
+
     with torch.no_grad():
         for data in my_loader:
             images = data.view(1,1,28,28)
