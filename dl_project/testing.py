@@ -76,7 +76,7 @@ epochs = 20
 ########################################################################### 
 
 if click.confirm('Do you want to train a new model?', default=True):
-    train_model(model, epochs, optimizer, train_loader, loss_func)
+    train_model(model, epochs, optimizer, train_loader, loss_func)      # training takes about 8 minutes
 
 
 ##########################################################################

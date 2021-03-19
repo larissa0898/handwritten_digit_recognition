@@ -24,6 +24,8 @@ Now you can run the code in 'testing.py'. You can decide, whether you want to se
 
 'Y' for training a new model. 'n' for loading old model. 
 
+Training takes about 8 minutes.
+
 ![Step3](/dl_project/step3.PNG)
 
 #### Step 5: 
