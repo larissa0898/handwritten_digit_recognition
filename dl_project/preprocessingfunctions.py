@@ -23,14 +23,17 @@ def findCenter(img):
 
 
 def firstpreprocessing(image):
-    mg = ~image                # invert image
-    mg = cv2.GaussianBlur(mg,(15,15),0)
+    """first preprocessing function based on the presentation
+    of Michael Garris """
+
+    img2 = ~image                # invert image
+    img2 = cv2.GaussianBlur(img2,(15,15),0)
 
 
     img1 = cv2.imread("blanko.jpg")
     img1 = ~img1                  # invert image
 
-    img2 = cv2.resize(mg, None, fx=0.74, fy=0.74)
+    img2 = cv2.resize(img2, None, fx=0.74, fy=0.74)
 
     # calculates center of the images
     pt1 = findCenter(img1)
@@ -58,6 +61,9 @@ def firstpreprocessing(image):
 ############################################################
 
 def secondpreprocessing(image):
+    """ second preprocessing function based on
+        the MNIST website """
+
     img = Image.fromarray(image)    
 
     img = ImageOps.invert(img)               # inverts image from white/black to black/white
