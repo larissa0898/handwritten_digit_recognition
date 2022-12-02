@@ -1,6 +1,6 @@
 # Handwritten Digit Recognition
 
-#### Inhaltsverzeichnis
+### Table of Contents
 - [Installation](#installation)
 - [Usage](#daten)
 
