@@ -8,7 +8,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from configparser import ConfigParser
 from model import Net, train_model, testingmydata
-from preprocessingfunctions import firstpreprocessing, secondpreprocessing, show_train_images
+from preprocessing import firstpreprocessing, secondpreprocessing, show_train_images
 import matplotlib.pyplot as plt
 import numpy as np
 
