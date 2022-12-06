@@ -4,7 +4,7 @@
 - [Installation](#installation)
 - [Usage](#daten)
 
-##Installation 
+##Installation: 
 Download all the files on this GitHub repository.
 With `pip install -r requirements.txt` all relevant libraries are installed. 
 
