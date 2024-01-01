@@ -13,26 +13,16 @@ To To get started, follow these steps:
 2. Clone the repository to your local machine and navigate to the project directory:
     ```bash
     git clone https://github.com/larissa0898/handwritten_digit_recognition.git
-    cd repository
+    cd handwritten_digit_recognition
     ```
 
-3. Create a virtual environment:
+3. Create and activate a virtual environment:
     ```bash
     python -m venv myenv
+    myenv\Scripts\activate # On macOS and Linux: source myenv/bin/activate
     ```
 
-4. Activate your environment:
-    On Windows:
-    ```bash
-    myenv\Scripts\activate
-    ```
-    
-    On macOS and Linux:
-    ```bash
-    source myenv/bin/activate
-    ```
-
-5. Install the necessary dependencies:
+4. Install the necessary dependencies:
     ```bash
     pip install -r requirements.txt
     ```
