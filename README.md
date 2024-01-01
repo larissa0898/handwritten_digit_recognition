@@ -6,10 +6,6 @@
 - [References](#references)
 
 ## Installation: 
-Download all the files on this GitHub repository.
-With `pip install -r requirements.txt` all relevant libraries are installed. 
-
-## Usage: 
 To To get started, follow these steps:
 
 1. Ensure you have Python installed. This project is compatible with Python Python 3.9.5 and above.
@@ -41,11 +37,13 @@ To To get started, follow these steps:
     pip install -r requirements.txt
     ```
 
-6. Run the code by executing the `main.py` script:
+## Usage: 
+
+1. Run the code by executing the `main.py` script:
     ```bash
     python main.py
     ```
-7. When prompted, make the following choices:
+2. When prompted, make the following choices:
 
     - `Do you want to see some of the MNIST images?`:
         - Type `y` to view 6 MNIST images.
@@ -56,4 +54,4 @@ To To get started, follow these steps:
         - Type `n` to load a pre-existing model.
 
 ## References:
-MNIST dataset: [MNIST](http://yann.lecun.com/exdb/mnist/)
+MNIST dataset: [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)
