@@ -8,7 +8,7 @@
 ## Installation: 
 To To get started, follow these steps:
 
-1. Ensure you have Python installed. This project is compatible with Python Python 3.9.5 and above.
+1. Ensure you have Python installed. This project is compatible with Python 3.9.5 and above.
 
 2. Clone the repository to your local machine and navigate to the project directory:
     ```bash
