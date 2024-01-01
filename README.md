@@ -2,38 +2,58 @@
 
 ### Table of Contents
 - [Installation](#installation)
-- [Usage](#daten)
+- [Usage](#usage)
+- [References](#references)
 
 ## Installation: 
 Download all the files on this GitHub repository.
 With `pip install -r requirements.txt` all relevant libraries are installed. 
 
 ## Usage: 
-You can run the code in `testing.py`. Decide, whether you want to see some of the MNIST images or not and whether you want to train a new model or use an old model, by choosing:
+To To get started, follow these steps:
 
+1. Ensure you have Python installed. This project is compatible with Python Python 3.9.5 and above.
 
-`Y` for seeing 6 MNIST images. `n` for no.
+2. Clone the repository to your local machine and navigate to the project directory:
+    ```bash
+    git clone https://github.com/larissa0898/handwritten_digit_recognition.git
+    cd repository
+    ```
 
-and
+3. Create a virtual environment:
+    ```bash
+    python -m venv myenv
+    ```
 
-`Y` for training a new model. `n` for loading old model. 
+4. Activate your environment:
+    On Windows:
+    ```bash
+    myenv\Scripts\activate
+    ```
+    
+    On macOS and Linux:
+    ```bash
+    source myenv/bin/activate
+    ```
 
-Training takes about 8 minutes.
+5. Install the necessary dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-![Step3](/dl_project/readme_imgs/step3.PNG)
+6. Run the code by executing the `main.py` script:
+    ```bash
+    python main.py
+    ```
+7. When prompted, make the following choices:
 
+    - `Do you want to see some of the MNIST images?`:
+        - Type `y` to view 6 MNIST images.
+        - Type `n` to skip this step.
 
-After that the accuracy of the MNIST test images will be printed in the command prompt as well as my own images with the corresponding predictions of the model and the total accuracy of all my own images. 
+    - `Do you want to train a new model?`:
+        - Type `y` to train a new model (This process takes approximately 8 minutes).
+        - Type `n` to load a pre-existing model.
 
-![Step1.1](/dl_project/readme_imgs/step1.1.PNG)
-![Step1.2](/dl_project/readme_imgs/step1.2.PNG)
-
-
-There are two different pre-processing functions (`firstpreprocessing()` and `secondpreprocessing()`), which can be used for my own images. Just change it in `testing.py` in line 121, if you want to use the other pre-processing function.
-
-
--->   `firstpreprocessing()` yields better results than `secondpreprocessing()`
-
-![Step5](/dl_project/readme_imgs/step5.PNG)
-
-
+## References:
+MNIST dataset: [MNIST](http://yann.lecun.com/exdb/mnist/)
